@@ -627,6 +627,34 @@ static int spl_array_has_dimension(zval *object, zval *offset, int check_empty T
 	return spl_array_has_dimension_ex(1, object, offset, check_empty TSRMLS_CC);
 } /* }}} */
 
+/* {{{ spl_array_object_verify_pos */
+static inline int spl_array_object_verify_pos(spl_array_object *object, HashTable *ht, int check_current)
+{
+	if (!ht) {
+		php_error_docref(NULL TSRMLS_CC, E_NOTICE, "Array was modified outside object and is no longer an array");
+		return FAILURE;
+	}
+
+	if ((object->ar_flags & SPL_ARRAY_IS_REF)) {
+		if (object->pos == NULL) {
+			if (check_current) {
+				if (object->pos_h == 0 && ht->pInternalPointer == NULL) {
+					php_error_docref(NULL TSRMLS_CC, E_NOTICE, "Array was empty. No current entry available");
+				} else {
+					php_error_docref(NULL TSRMLS_CC, E_NOTICE, "Array reached the end. No current entry available");
+				}
+			}
+
+			return FAILURE;
+		} else if (spl_hash_verify_pos_ex(object, ht TSRMLS_CC) == FAILURE) {
+			php_error_docref(NULL TSRMLS_CC, E_NOTICE, "Array was modified outside object and internal position is no longer valid");
+			return FAILURE;
+		}
+	}
+
+	return SUCCESS;
+} /* }}} */
+
 /* {{{ proto bool ArrayObject::offsetExists(mixed $index)
        proto bool ArrayIterator::offsetExists(mixed $index)
    Returns whether the requested $index exists. */
@@ -1468,13 +1496,7 @@ SPL_METHOD(Array, current)
 		return;
 	}
 
-	if (!aht) {
-		php_error_docref(NULL TSRMLS_CC, E_NOTICE, "Array was modified outside object and is no longer an array");
-		return;
-	}
-
-	if ((intern->ar_flags & SPL_ARRAY_IS_REF) && spl_hash_verify_pos_ex(intern, aht TSRMLS_CC) == FAILURE) {
-		php_error_docref(NULL TSRMLS_CC, E_NOTICE, "Array was modified outside object and internal position is no longer valid");
+	if (spl_array_object_verify_pos(intern, aht, 1) == FAILURE) {
 		return;
 	}
 
@@ -1504,13 +1526,7 @@ void spl_array_iterator_key(zval *object, zval *return_value TSRMLS_DC) /* {{{ *
 	ulong num_key;
 	HashTable *aht = spl_array_get_hash_table(intern, 0 TSRMLS_CC);
 
-	if (!aht) {
-		php_error_docref(NULL TSRMLS_CC, E_NOTICE, "Array was modified outside object and is no longer an array");
-		return;
-	}
-
-	if ((intern->ar_flags & SPL_ARRAY_IS_REF) && spl_hash_verify_pos_ex(intern, aht TSRMLS_CC) == FAILURE) {
-		php_error_docref(NULL TSRMLS_CC, E_NOTICE, "Array was modified outside object and internal position is no longer valid");
+	if (spl_array_object_verify_pos(intern, aht, 1) == FAILURE) {
 		return;
 	}
 
@@ -1538,13 +1554,12 @@ SPL_METHOD(Array, next)
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
-	
-	if (!aht) {
-		php_error_docref(NULL TSRMLS_CC, E_NOTICE, "Array was modified outside object and is no longer an array");
+
+	if (spl_array_object_verify_pos(intern, aht, 0) == FAILURE) {
 		return;
 	}
 
-	spl_array_next_ex(intern, aht TSRMLS_CC);
+	spl_array_next_no_verify(intern, aht TSRMLS_CC);
 }
 /* }}} */ 
 
@@ -1585,14 +1600,8 @@ SPL_METHOD(Array, hasChildren)
 	if (zend_parse_parameters_none() == FAILURE) {
 		return;
 	}
-	
-	if (!aht) {
-		php_error_docref(NULL TSRMLS_CC, E_NOTICE, "Array was modified outside object and is no longer an array");
-		RETURN_FALSE;
-	}
 
-	if ((intern->ar_flags & SPL_ARRAY_IS_REF) && spl_hash_verify_pos_ex(intern, aht TSRMLS_CC) == FAILURE) {
-		php_error_docref(NULL TSRMLS_CC, E_NOTICE, "Array was modified outside object and internal position is no longer valid");
+	if (spl_array_object_verify_pos(intern, aht, 1) == FAILURE) {
 		RETURN_FALSE;
 	}
 
@@ -1616,13 +1625,7 @@ SPL_METHOD(Array, getChildren)
 		return;
 	}
 
-	if (!aht) {
-		php_error_docref(NULL TSRMLS_CC, E_NOTICE, "Array was modified outside object and is no longer an array");
-		return;
-	}
-
-	if ((intern->ar_flags & SPL_ARRAY_IS_REF) && spl_hash_verify_pos_ex(intern, aht TSRMLS_CC) == FAILURE) {
-		php_error_docref(NULL TSRMLS_CC, E_NOTICE, "Array was modified outside object and internal position is no longer valid");
+	if (spl_array_object_verify_pos(intern, aht, 1) == FAILURE) {
 		return;
 	}
 
