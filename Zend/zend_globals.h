@@ -137,6 +137,9 @@ struct _zend_compiler_globals {
 	zend_bool  in_namespace;
 	zend_bool  has_bracketed_namespaces;
 
+	zval      *current_from;
+	zend_bool  current_from_is_global;
+
 	zend_compiler_context context;
 	zend_stack context_stack;
 

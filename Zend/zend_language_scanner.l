@@ -1263,6 +1263,10 @@ NEWLINE ("\r"|"\n"|"\r\n")
 	return T_NAMESPACE;
 }
 
+<ST_IN_SCRIPTING>"from" {
+	return T_FROM;
+}
+
 <ST_IN_SCRIPTING>"use" {
 	return T_USE;
 }

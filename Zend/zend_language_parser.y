@@ -161,6 +161,7 @@ static YYSIZE_T zend_yytnamerr(char*, const char*);
 %token T_TRY        "try (T_TRY)"
 %token T_CATCH      "catch (T_CATCH)"
 %token T_THROW      "throw (T_THROW)"
+%token T_FROM        "from (T_FROM)"
 %token T_USE        "use (T_USE)"
 %token T_INSTEADOF  "insteadof (T_INSTEADOF)"
 %token T_GLOBAL     "global (T_GLOBAL)"
@@ -235,6 +236,8 @@ top_statement:
 	|	T_NAMESPACE '{'					{ zend_do_begin_namespace(NULL, 1 TSRMLS_CC); }
 		top_statement_list '}'			{ zend_do_end_namespace(TSRMLS_C); }
 	|	T_USE use_declarations ';'      { zend_verify_namespace(TSRMLS_C); }
+	|	T_FROM namespace_name { zend_do_begin_from(&$2, 0 TSRMLS_CC); } T_USE use_declarations ';' { zend_verify_namespace(TSRMLS_C); zend_do_end_from(TSRMLS_C); }
+	|	T_FROM T_NS_SEPARATOR namespace_name { zend_do_begin_from(&$3, 1 TSRMLS_CC); } T_USE use_declarations ';' { zend_verify_namespace(TSRMLS_C); zend_do_end_from(TSRMLS_C); }
 	|	constant_declaration ';'		{ zend_verify_namespace(TSRMLS_C); }
 ;
 

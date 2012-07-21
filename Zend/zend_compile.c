@@ -6946,6 +6946,25 @@ void zend_do_use(znode *ns_name, znode *new_name, int is_global TSRMLS_DC) /* {{
 
 	ALLOC_ZVAL(ns);
 	*ns = ns_name->u.constant;
+
+	if (CG(current_from)) {
+		int length = Z_STRLEN_P(CG(current_from)) + Z_STRLEN_P(ns) + 1; /* include backslash */
+		char *buf = (char *) emalloc(length + 1);
+
+		memcpy(buf, Z_STRVAL_P(CG(current_from)), Z_STRLEN_P(CG(current_from)));
+		memcpy(buf + Z_STRLEN_P(CG(current_from)) + 1, Z_STRVAL_P(ns), Z_STRLEN_P(ns));
+
+		/* add backslash between them */
+		buf[Z_STRLEN_P(CG(current_from))] = '\\';
+		buf[length] = 0;
+
+		/* overwrite is_global when using from */
+		is_global = CG(current_from_is_global);
+
+		zval_dtor(ns);
+		ZVAL_STRINGL(ns, buf, length, 0);
+	}
+
 	if (new_name) {
 		name = &new_name->u.constant;
 	} else {
@@ -7051,6 +7070,29 @@ void zend_verify_namespace(TSRMLS_D) /* {{{ */
 {
 	if (CG(has_bracketed_namespaces) && !CG(in_namespace)) {
 		zend_error(E_COMPILE_ERROR, "No code may exist outside of namespace {}");
+	}
+}
+/* }}} */
+
+void zend_do_begin_from(const znode *from_ns, zend_bool is_global TSRMLS_DC) /* {{{ */
+{
+	if (CG(current_from)) {
+		zval_dtor(CG(current_from));
+	} else {
+		ALLOC_ZVAL(CG(current_from));
+	}
+
+	*CG(current_from) = from_ns->u.constant;
+	CG(current_from_is_global) = is_global;
+}
+/* }}} */
+
+void zend_do_end_from(TSRMLS_D) /* {{{ */
+{
+	if (CG(current_from)) {
+		zval_dtor(CG(current_from));
+		efree(CG(current_from));
+		CG(current_from) = NULL;
 	}
 }
 /* }}} */
