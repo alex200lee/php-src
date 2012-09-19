@@ -2688,9 +2688,6 @@ static int ZEND_FASTCALL  ZEND_INIT_STATIC_METHOD_CALL_SPEC_CONST_CONST_HANDLER(
 	if (IS_CONST == IS_CONST) {
 		/* no function found. try a static method in class */
 		ce = zend_fetch_class(Z_STRVAL(opline->op1.u.constant), Z_STRLEN(opline->op1.u.constant), opline->extended_value TSRMLS_CC);
-		if (UNEXPECTED(EG(exception) != NULL)) {
-			ZEND_VM_CONTINUE();
-		}
 		if (!ce) {
 			zend_error_noreturn(E_ERROR, "Class '%s' not found", Z_STRVAL(opline->op1.u.constant));
 		}
@@ -2839,9 +2836,6 @@ static int ZEND_FASTCALL  ZEND_FETCH_CONSTANT_SPEC_CONST_CONST_HANDLER(ZEND_OPCO
 		if (IS_CONST == IS_CONST) {
 
 			ce = zend_fetch_class(Z_STRVAL(opline->op1.u.constant), Z_STRLEN(opline->op1.u.constant), opline->extended_value TSRMLS_CC);
-			if (UNEXPECTED(EG(exception) != NULL)) {
-				ZEND_VM_CONTINUE();
-			}
 			if (!ce) {
 				zend_error_noreturn(E_ERROR, "Undefined class constant '%s'", Z_STRVAL(opline->op2.u.constant));
 			}
@@ -3265,9 +3259,6 @@ static int ZEND_FASTCALL  ZEND_INIT_STATIC_METHOD_CALL_SPEC_CONST_TMP_HANDLER(ZE
 	if (IS_CONST == IS_CONST) {
 		/* no function found. try a static method in class */
 		ce = zend_fetch_class(Z_STRVAL(opline->op1.u.constant), Z_STRLEN(opline->op1.u.constant), opline->extended_value TSRMLS_CC);
-		if (UNEXPECTED(EG(exception) != NULL)) {
-			ZEND_VM_CONTINUE();
-		}
 		if (!ce) {
 			zend_error_noreturn(E_ERROR, "Class '%s' not found", Z_STRVAL(opline->op1.u.constant));
 		}
@@ -3734,9 +3725,6 @@ static int ZEND_FASTCALL  ZEND_INIT_STATIC_METHOD_CALL_SPEC_CONST_VAR_HANDLER(ZE
 	if (IS_CONST == IS_CONST) {
 		/* no function found. try a static method in class */
 		ce = zend_fetch_class(Z_STRVAL(opline->op1.u.constant), Z_STRLEN(opline->op1.u.constant), opline->extended_value TSRMLS_CC);
-		if (UNEXPECTED(EG(exception) != NULL)) {
-			ZEND_VM_CONTINUE();
-		}
 		if (!ce) {
 			zend_error_noreturn(E_ERROR, "Class '%s' not found", Z_STRVAL(opline->op1.u.constant));
 		}
@@ -3959,9 +3947,6 @@ static int ZEND_FASTCALL  ZEND_INIT_STATIC_METHOD_CALL_SPEC_CONST_UNUSED_HANDLER
 	if (IS_CONST == IS_CONST) {
 		/* no function found. try a static method in class */
 		ce = zend_fetch_class(Z_STRVAL(opline->op1.u.constant), Z_STRLEN(opline->op1.u.constant), opline->extended_value TSRMLS_CC);
-		if (UNEXPECTED(EG(exception) != NULL)) {
-			ZEND_VM_CONTINUE();
-		}
 		if (!ce) {
 			zend_error_noreturn(E_ERROR, "Class '%s' not found", Z_STRVAL(opline->op1.u.constant));
 		}
@@ -4396,9 +4381,6 @@ static int ZEND_FASTCALL  ZEND_INIT_STATIC_METHOD_CALL_SPEC_CONST_CV_HANDLER(ZEN
 	if (IS_CONST == IS_CONST) {
 		/* no function found. try a static method in class */
 		ce = zend_fetch_class(Z_STRVAL(opline->op1.u.constant), Z_STRLEN(opline->op1.u.constant), opline->extended_value TSRMLS_CC);
-		if (UNEXPECTED(EG(exception) != NULL)) {
-			ZEND_VM_CONTINUE();
-		}
 		if (!ce) {
 			zend_error_noreturn(E_ERROR, "Class '%s' not found", Z_STRVAL(opline->op1.u.constant));
 		}
@@ -10516,9 +10498,6 @@ static int ZEND_FASTCALL  ZEND_INIT_STATIC_METHOD_CALL_SPEC_VAR_CONST_HANDLER(ZE
 	if (IS_VAR == IS_CONST) {
 		/* no function found. try a static method in class */
 		ce = zend_fetch_class(Z_STRVAL(opline->op1.u.constant), Z_STRLEN(opline->op1.u.constant), opline->extended_value TSRMLS_CC);
-		if (UNEXPECTED(EG(exception) != NULL)) {
-			ZEND_VM_CONTINUE();
-		}
 		if (!ce) {
 			zend_error_noreturn(E_ERROR, "Class '%s' not found", Z_STRVAL(opline->op1.u.constant));
 		}
@@ -10667,9 +10646,6 @@ static int ZEND_FASTCALL  ZEND_FETCH_CONSTANT_SPEC_VAR_CONST_HANDLER(ZEND_OPCODE
 		if (IS_VAR == IS_CONST) {
 
 			ce = zend_fetch_class(Z_STRVAL(opline->op1.u.constant), Z_STRLEN(opline->op1.u.constant), opline->extended_value TSRMLS_CC);
-			if (UNEXPECTED(EG(exception) != NULL)) {
-				ZEND_VM_CONTINUE();
-			}
 			if (!ce) {
 				zend_error_noreturn(E_ERROR, "Undefined class constant '%s'", Z_STRVAL(opline->op2.u.constant));
 			}
@@ -12329,9 +12305,6 @@ static int ZEND_FASTCALL  ZEND_INIT_STATIC_METHOD_CALL_SPEC_VAR_TMP_HANDLER(ZEND
 	if (IS_VAR == IS_CONST) {
 		/* no function found. try a static method in class */
 		ce = zend_fetch_class(Z_STRVAL(opline->op1.u.constant), Z_STRLEN(opline->op1.u.constant), opline->extended_value TSRMLS_CC);
-		if (UNEXPECTED(EG(exception) != NULL)) {
-			ZEND_VM_CONTINUE();
-		}
 		if (!ce) {
 			zend_error_noreturn(E_ERROR, "Class '%s' not found", Z_STRVAL(opline->op1.u.constant));
 		}
@@ -14134,9 +14107,6 @@ static int ZEND_FASTCALL  ZEND_INIT_STATIC_METHOD_CALL_SPEC_VAR_VAR_HANDLER(ZEND
 	if (IS_VAR == IS_CONST) {
 		/* no function found. try a static method in class */
 		ce = zend_fetch_class(Z_STRVAL(opline->op1.u.constant), Z_STRLEN(opline->op1.u.constant), opline->extended_value TSRMLS_CC);
-		if (UNEXPECTED(EG(exception) != NULL)) {
-			ZEND_VM_CONTINUE();
-		}
 		if (!ce) {
 			zend_error_noreturn(E_ERROR, "Class '%s' not found", Z_STRVAL(opline->op1.u.constant));
 		}
@@ -15033,9 +15003,6 @@ static int ZEND_FASTCALL  ZEND_INIT_STATIC_METHOD_CALL_SPEC_VAR_UNUSED_HANDLER(Z
 	if (IS_VAR == IS_CONST) {
 		/* no function found. try a static method in class */
 		ce = zend_fetch_class(Z_STRVAL(opline->op1.u.constant), Z_STRLEN(opline->op1.u.constant), opline->extended_value TSRMLS_CC);
-		if (UNEXPECTED(EG(exception) != NULL)) {
-			ZEND_VM_CONTINUE();
-		}
 		if (!ce) {
 			zend_error_noreturn(E_ERROR, "Class '%s' not found", Z_STRVAL(opline->op1.u.constant));
 		}
@@ -16529,9 +16496,6 @@ static int ZEND_FASTCALL  ZEND_INIT_STATIC_METHOD_CALL_SPEC_VAR_CV_HANDLER(ZEND_
 	if (IS_VAR == IS_CONST) {
 		/* no function found. try a static method in class */
 		ce = zend_fetch_class(Z_STRVAL(opline->op1.u.constant), Z_STRLEN(opline->op1.u.constant), opline->extended_value TSRMLS_CC);
-		if (UNEXPECTED(EG(exception) != NULL)) {
-			ZEND_VM_CONTINUE();
-		}
 		if (!ce) {
 			zend_error_noreturn(E_ERROR, "Class '%s' not found", Z_STRVAL(opline->op1.u.constant));
 		}
@@ -17896,9 +17860,6 @@ static int ZEND_FASTCALL  ZEND_FETCH_CONSTANT_SPEC_UNUSED_CONST_HANDLER(ZEND_OPC
 		if (IS_UNUSED == IS_CONST) {
 
 			ce = zend_fetch_class(Z_STRVAL(opline->op1.u.constant), Z_STRLEN(opline->op1.u.constant), opline->extended_value TSRMLS_CC);
-			if (UNEXPECTED(EG(exception) != NULL)) {
-				ZEND_VM_CONTINUE();
-			}
 			if (!ce) {
 				zend_error_noreturn(E_ERROR, "Undefined class constant '%s'", Z_STRVAL(opline->op2.u.constant));
 			}
